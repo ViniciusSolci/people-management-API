@@ -1,10 +1,9 @@
 package com.peoplemanagementapi.entiy;
 
 import javax.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+
+import com.peoplemanagementapi.framework.AddressDTO;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
@@ -12,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "address")
 @EntityListeners(AuditingEntityListener.class)
@@ -25,7 +25,7 @@ public class Address {
     private String streetName;
 
     @Column(name = "street_number")
-    private long streetNumber;
+    private String streetNumber;
 
     @Column(name = "zip_code")
     private String zipCode;
@@ -43,4 +43,11 @@ public class Address {
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
+    public Address(AddressDTO addressDTO) {
+        this.setStreetName(addressDTO.getStreetName());
+        this.setStreetNumber(addressDTO.getStreetNumber());
+        this.setZipCode(addressDTO.getZipCode());
+        this.setCityName(addressDTO.getCityName());
+        this.setStateName(addressDTO.getStateName());
+    }
 }

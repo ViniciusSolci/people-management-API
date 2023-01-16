@@ -2,6 +2,7 @@ package com.peoplemanagementapi.usecase;
 
 import com.peoplemanagementapi.entiy.Address;
 import com.peoplemanagementapi.entiy.Person;
+import com.peoplemanagementapi.framework.AddressDTO;
 import com.peoplemanagementapi.framework.PersonDTO;
 import com.peoplemanagementapi.framework.exception.NotFoundException;
 import com.peoplemanagementapi.repository.PersonRepository;
@@ -60,8 +61,22 @@ public class PersonUseCase {
 
     public void updateMainAddress(long personId, long addressId) {
         Person person = getPersonById(personId);
-        person.setAddresses(person.getAddresses().stream().filter(address -> Boolean.TRUE.equals(address.isMainAddress())).peek(address -> address.setMainAddress(false)).collect(Collectors.toSet()));
-        person.setAddresses(person.getAddresses().stream().filter(address -> Long.valueOf(address.getId()).equals(addressId)).peek(address -> address.setMainAddress(true)).collect(Collectors.toSet()));
+        for (Address address: person.getAddresses()) {
+            if (address.isMainAddress()){
+                address.setMainAddress(false);
+            }
+            if (address.getId() == addressId){
+                address.setMainAddress(true);
+            }
+        }
 
+    }
+
+    public Person createPersonAddress(AddressDTO addressDTO, long personId) {
+        Person person = getPersonById(personId);
+        Address address = new Address(addressDTO);
+        person.getAddresses().add(address);
+        personRepository.save(person);
+        return person;
     }
 }

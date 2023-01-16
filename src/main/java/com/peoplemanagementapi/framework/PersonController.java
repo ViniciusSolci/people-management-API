@@ -46,8 +46,8 @@ public class PersonController {
 
     @PostMapping("/{id}/address")
     @ResponseStatus(HttpStatus.CREATED)
-    public Person createPersonAddress(@Valid @RequestBody PersonDTO personDTO) {
-        return personUseCase.createPerson(personDTO);
+    public Person createPersonAddress(@Valid @RequestBody AddressDTO addressDTO, @PathVariable(value = "id") long personId) {
+        return personUseCase.createPersonAddress(addressDTO, personId);
     }
 
     @GetMapping("/{id}/address")
