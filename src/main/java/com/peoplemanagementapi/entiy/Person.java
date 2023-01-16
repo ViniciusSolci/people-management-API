@@ -1,11 +1,11 @@
 package com.peoplemanagementapi.entiy;
 
 import com.peoplemanagementapi.framework.PersonDTO;
-import javax.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "person")
 @EntityListeners(AuditingEntityListener.class)
@@ -28,7 +27,7 @@ public class Person {
     private String name;
 
     @Column(name = "birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @OneToMany(mappedBy = "person", orphanRemoval = true)
     @ToString.Exclude

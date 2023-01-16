@@ -26,14 +26,14 @@ public class PersonController {
         return personUseCase.createPerson(personDTO);
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Person updatePerson(@Valid @RequestBody PersonDTO personDTO, @PathVariable(value = "id") long personId) {
+    @PutMapping("/{personId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Person updatePerson(@Valid @RequestBody PersonDTO personDTO, @PathVariable(value = "personId") long personId) {
         return personUseCase.updatePerson(personDTO, personId);
     }
 
-    @GetMapping("/{id}")
-    public Person getPersonById(@PathVariable(value = "id") long personId) {
+    @GetMapping("/{personId}")
+    public Person getPersonById(@PathVariable(value = "personId") long personId) {
         return personUseCase.getPersonById(personId);
     }
 
@@ -44,20 +44,20 @@ public class PersonController {
         } else return personUseCase.getAllPeople();
     }
 
-    @PostMapping("/{id}/address")
+    @PostMapping("/{personId}/address")
     @ResponseStatus(HttpStatus.CREATED)
-    public Person createPersonAddress(@Valid @RequestBody PersonDTO personDTO) {
-        return personUseCase.createPerson(personDTO);
+    public void createPersonAddress(@Valid @RequestBody AddressDTO addressDTO, @PathVariable(value = "personId") long personId) {
+        personUseCase.createPersonAddress(addressDTO, personId);
     }
 
-    @GetMapping("/{id}/address")
-    public Set<Address> getAllAddressForPerson(@PathVariable(value = "id") long personId) {
+    @GetMapping("/{personId}/address")
+    public Set<Address> getAllAddressForPerson(@PathVariable(value = "personId") long personId) {
         return personUseCase.getAllAddress(personId);
     }
 
-    @PutMapping("/{id}/address/{id}")
+    @PutMapping("/{personId}/address/{addressId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updatePersonMainAddress(@PathVariable(value = "id") long personId, @PathVariable(value = "id") long addressId) {
+    public void updatePersonMainAddress(@PathVariable(value = "personId") long personId, @PathVariable(value = "addressId") long addressId) {
         personUseCase.updateMainAddress(personId, addressId);
     }
 }
