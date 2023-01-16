@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "person")
 @EntityListeners(AuditingEntityListener.class)

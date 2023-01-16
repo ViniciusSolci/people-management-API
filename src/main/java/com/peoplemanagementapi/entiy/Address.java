@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "address")
 @EntityListeners(AuditingEntityListener.class)

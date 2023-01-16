@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -72,11 +71,10 @@ public class PersonUseCase {
 
     }
 
-    public Person createPersonAddress(AddressDTO addressDTO, long personId) {
+    public void createPersonAddress(AddressDTO addressDTO, long personId) {
         Person person = getPersonById(personId);
         Address address = new Address(addressDTO);
         person.getAddresses().add(address);
         personRepository.save(person);
-        return person;
     }
 }
