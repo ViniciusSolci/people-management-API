@@ -1,30 +1,55 @@
 package com.peoplemanagementapi.entiy;
 
-import lombok.Data;
+import com.peoplemanagementapi.framework.PersonDTO;
+import javax.persistence.*;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "person")
+@EntityListeners(AuditingEntityListener.class)
 public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private long id;
+
+    @Column
     private String name;
 
+    @Column(name = "birth_date")
     private Date birthDate;
 
-    private List<Address> addressList;
+    @OneToMany(mappedBy = "person", orphanRemoval = true)
+    @ToString.Exclude
+    private Set<Address> addresses = new LinkedHashSet<>();
 
-    @Data
-    public static class Address {
-        private String streetName;
-
-        private long streetNumber;
-
-        private String zipCode;
-
-        private String cityName;
-
-        private String stateName;
-
-        private boolean mainAddress;
+    public Person(PersonDTO personDTO) {
+        this.setName(personDTO.getName());
+        this.setBirthDate(personDTO.getBirthDate());
+        this.setAddresses(personDTO.getAddresses());
     }
+
+    public void updateEntityFromDTO(PersonDTO personDTO) {
+        if (!this.getName().equalsIgnoreCase(personDTO.getName())){
+            this.setName(personDTO.getName());
+        }
+        if (!this.getBirthDate().equals(personDTO.getBirthDate())){
+            this.setBirthDate(personDTO.getBirthDate());
+        }
+        if (!this.getAddresses().equals(personDTO.getAddresses())){
+            this.setAddresses(personDTO.getAddresses());
+        }
+    }
+
 }
