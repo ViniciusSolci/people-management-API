@@ -4,6 +4,7 @@ import com.peoplemanagementapi.entiy.Address;
 import com.peoplemanagementapi.entiy.Person;
 import com.peoplemanagementapi.usecase.PersonUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -37,11 +38,10 @@ public class PersonController {
         return personUseCase.getPersonById(personId);
     }
 
-    @GetMapping("")
-    public Slice<Person> getAllPeople(@RequestParam Optional<Integer> pageNumber, @RequestParam Optional<Integer> pageSize) {
-        if (pageNumber.isPresent() && pageSize.isPresent()) {
-            return personUseCase.getAllPeople(pageNumber.get(), pageSize.get());
-        } else return personUseCase.getAllPeople();
+    @GetMapping
+    public Page<Person> getAllPeople(@RequestParam(required = false, defaultValue = "0") int pageNumber,
+                                     @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        return personUseCase.getAllPeople(pageNumber, pageSize);
     }
 
     @PostMapping("/{personId}/address")

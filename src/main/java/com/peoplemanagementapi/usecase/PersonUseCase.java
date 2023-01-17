@@ -7,70 +7,62 @@ import com.peoplemanagementapi.framework.PersonDTO;
 import com.peoplemanagementapi.framework.exception.NotFoundException;
 import com.peoplemanagementapi.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
-import java.util.NoSuchElementException;
+import javax.transaction.Transactional;
 import java.util.Set;
+
+import static com.peoplemanagementapi.framework.exception.ErrorMessage.PERSON_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
 public class PersonUseCase {
 
-    private final @NonNull PersonRepository personRepository;
+    @NonNull
+    private final PersonRepository personRepository;
 
     public Person createPerson(PersonDTO personDTO) {
         Person person = new Person(personDTO);
         return personRepository.save(person);
     }
 
-    public Person updatePerson(@Valid PersonDTO personDTO, long personId) {
+    public Person updatePerson(PersonDTO personDTO, long personId) {
         Person person = getPersonById(personId);
         person.updateEntityFromDTO(personDTO);
         return personRepository.save(person);
     }
 
     public Person getPersonById(long personId) {
-        try {
-            return personRepository.findById(personId).orElseThrow();
-        } catch (NoSuchElementException exception) {
-            throw new NotFoundException("Person with id: " + personId + " does not exists");
-        }
+        return personRepository.findById(personId)
+                .orElseThrow(() -> new NotFoundException(String.format(PERSON_NOT_FOUND, personId)));
     }
 
-    public Slice<Person> getAllPeople(int pageNumber, int pageSize) {
+    public Page<Person> getAllPeople(int pageNumber, int pageSize) {
         Pageable sortedById = PageRequest.of(pageNumber, pageSize, Sort.by("id"));
         return personRepository.findAll(sortedById);
-    }
-
-    public Slice<Person> getAllPeople() {
-        return personRepository.findAll(Pageable.unpaged());
     }
 
     public Set<Address> getAllAddress(long personId) {
         Person person = getPersonById(personId);
         return person.getAddresses();
-
     }
 
     public void updateMainAddress(long personId, long addressId) {
         Person person = getPersonById(personId);
-        for (Address address: person.getAddresses()) {
-            if (address.isMainAddress()){
+        for (Address address : person.getAddresses()) {
+            if (address.isMainAddress()) {
                 address.setMainAddress(false);
             }
-            if (address.getId() == addressId){
+            if (address.getId() == addressId) {
                 address.setMainAddress(true);
             }
         }
-
+        personRepository.save(person);
     }
 
+    @Transactional
     public void createPersonAddress(AddressDTO addressDTO, long personId) {
         Person person = getPersonById(personId);
         Address address = new Address(addressDTO);

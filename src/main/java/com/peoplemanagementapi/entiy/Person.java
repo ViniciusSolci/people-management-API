@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,9 +30,10 @@ public class Person {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @OneToMany(mappedBy = "person", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "personId")
     @ToString.Exclude
-    private Set<Address> addresses = new LinkedHashSet<>();
+    private Set<Address> addresses = new HashSet<>();
 
     public Person(PersonDTO personDTO) {
         this.setName(personDTO.getName());
@@ -50,5 +52,4 @@ public class Person {
             this.setAddresses(personDTO.getAddresses());
         }
     }
-
 }
