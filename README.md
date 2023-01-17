@@ -1,14 +1,41 @@
-# Read Me First
-The following was discovered as part of building this project:
+# People Control API
 
-* The JVM level was changed from '11' to '17', review the [JDK Version Range](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions#jdk-version-range) on the wiki for more details.
+API to create and control people
 
-# Getting Started
+## Technologies
 
-### Reference Documentation
-For further reference, please consider the following sections:
+- Spring
+- Java 11
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.1/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.1/maven-plugin/reference/html/#build-image)
+## Getting Started
 
+### Requirements
+
+- Java 11
+
+### Running
+
+- Go to src/main/java/com/peoplemanagementapi/ and run "Main.java"
+
+## APIs
+### PERSON
+- **POST** /v1/person
+    - Creates a new person
+    - Expects a request body such as {"name":"name", "birthDate":"2000-01-01", "addresses":[]}
+- **PUT** /v1/person
+    - Creates a new person
+    - Expects a request body such as {"name":"name", "birthDate":"2000-01-01", "addresses":[]}
+- **GET** /v1/person
+    - Returns a list with all person. An empty list is returned if no people are found
+    - Can receive query parameters such as page size and page number
+- **GET** /v1/person/{id}
+    - Returns a json with the person information
+    - id variable expects an integer
+### ADDRESS
+- **POST** /v1/person/{personId}/address
+    - Creates a new address
+    - Expects a request body such as {"cityName": "Testpolis", "stateName": "UF", "streetName": "Test Avenue", "streetNumber": "1234", "zipCode": "12345"}
+- **GET** /v1/person/{personId}/address
+    - Returns a list with all addresses. An empty list is returned if no persons are found
+- **PUT** /v1/person/{personId}/address/{addressId}
+    - Set the informed address as main address for person
