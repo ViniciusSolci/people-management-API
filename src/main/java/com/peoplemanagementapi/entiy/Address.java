@@ -38,10 +38,6 @@ public class Address {
     @Column(name = "main_address")
     private boolean mainAddress;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
-
     public Address(AddressDTO addressDTO) {
         this.setStreetName(addressDTO.getStreetName());
         this.setStreetNumber(addressDTO.getStreetNumber());
