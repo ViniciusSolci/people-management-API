@@ -29,17 +29,7 @@ class PersonControllerTest {
     void createPersonForOtherTests() throws Exception {
         mockMvc.perform(post("/v1/person")
                 .contentType("application/json")
-                .content("{\"name\":\"person test\", \"birthDate\":\"2013-10-21\", \"addresses\":[]}"));
-
-        mockMvc.perform(post("/v1/person/1/address")
-                .contentType("application/json")
-                .content("{\n" +
-                        "\"cityName\": \"Testpolis\",\n" +
-                        "\"stateName\": \"UF\",\n" +
-                        "\"streetName\": \"Test Avenue\",\n" +
-                        "\"streetNumber\": \"1234\",\n" +
-                        "\"zipCode\": \"12345\"\n" +
-                        "}"));
+                .content("{\"name\":\"person test\", \"birthDate\":\"2013-10-21\", \"addresses\":[{\"cityName\": \"Testpolis\", \"stateName\": \"UF\", \"streetName\": \"Test Avenue\", \"streetNumber\": \"1234\", \"zipCode\": \"12345\"}]}"));
     }
 
     @Test
